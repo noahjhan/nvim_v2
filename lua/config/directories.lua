@@ -6,7 +6,6 @@ local dirs = {
   { path = home .. "/github_projects", command = "Tex" },
   { path = home .. "/stapl-developer/benchmarks/cuda", command = "Tex" }
 }
--- -- Line number toggle on Insert mode --
 
 local function dir_exists(path)
   local f = io.open(path, "r")

@@ -1,10 +1,26 @@
--- parsers --
 return {
   "nvim-treesitter/nvim-treesitter",
   build = ":TSUpdate",
+
   config = function()
-    require("nvim-treesitter").setup {
-      ensure_installed = {
+    require("nvim-treesitter").install({
+      "c",
+      "cpp",
+      "lua",
+      "go",
+      "python",
+      "rust",
+      "haskell",
+      "typescript",
+      "javascript",
+      "java",
+      "kotlin",
+      "vim",
+      "html",
+      "json",
+    })
+    vim.api.nvim_create_autocmd("FileType", {
+      pattern = {
         "c",
         "cpp",
         "lua",
@@ -19,8 +35,10 @@ return {
         "vim",
         "html",
         "json",
-        "bash",
       },
-    }
-  end
+      callback = function()
+        vim.treesitter.start()
+      end,
+    })
+  end,
 }
