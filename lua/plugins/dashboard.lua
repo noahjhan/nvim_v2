@@ -1,7 +1,7 @@
 local ascii_art = require('config.ascii')
-local directories = dofile(vim.fn.stdpath("config") .. "/lua/config/directories.lua")
 
 math.randomseed(os.time())
+
 local garfield_quotes = {
   "I'm not overweight. I'm undertall.",
   "Diet is 'die' with a 't'.",
@@ -12,63 +12,49 @@ local garfield_quotes = {
   "I love lasagna!",
   "Show me a good mouser, and I'll show you a cat with bad breath.",
 }
+
 local random_index = math.random(#garfield_quotes)
 print(garfield_quotes[random_index])
 
-local project_dir = nil
-for _, entry in ipairs(directories) do
-  if entry.path:match("github_projects$") then
-    project_dir = entry.path
-    break
-  end
-end
-if not project_dir then
-  for _, entry in ipairs(directories) do
-    if entry.path:match("cuda$") then
-      project_dir = entry.path
-      break
-    end
-  end
-end
-
-local enter_action = project_dir
-  and (":cd " .. project_dir .. " | Ex")
-  or ":Ex"
-
 return {
-  { 
-    'nvim-tree/nvim-web-devicons' 
+  {
+    'nvim-tree/nvim-web-devicons'
   },
   {
     'nvimdev/dashboard-nvim',
     event = 'VimEnter',
     config = function()
-      require('dashboard').setup { 
+      require('dashboard').setup {
         theme = 'doom',
         config = {
-          header = ascii_art.neogarf,
+          header = ascii_art.Neogarf,
           center = {
             {
-              icon = ' ',
+              icon = ' ',
               icon_hl = 'Title',
               desc = 'Lasagna Enter',
-              action = enter_action,
+              action = ':cd ~/github_projects | Ex',
             },
             {
-              icon = ' ',
+              icon = ' ',
               icon_hl = 'Title',
               desc = 'Lasagna Config',
               action = ':cd ~/.config/nvim | Ex',
             },
             {
-              icon = ' ',
+              icon = ' ',
               icon_hl = 'Title',
-              desc = 'Lasagna Find',
-              action = (project_dir and (":cd " .. project_dir .. " | Telescope find_files | Ex") 
-                        or ':Telescope find_files')
+              desc = 'Lasagna Wezterm',
+              action = ':cd ~/.config/wezterm | Ex',
             },
             {
-              icon = ' ',
+              icon = ' ',
+              icon_hl = 'Title',
+              desc = 'Lasagna Find',
+              action = ':cd ~/github_projects | Telescope find_files | Ex'
+            },
+            {
+              icon = ' ',
               icon_hl = 'Title',
               desc = 'Lasagna Quit',
               action = ':q',

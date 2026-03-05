@@ -1,4 +1,4 @@
-neogarf = {
+Neogarf = {
     {
         '',
         '    ███╗   ██╗███████╗ ██████╗  ██████╗  █████╗ ██████╗ ███████╗ ',
@@ -87,11 +87,11 @@ neogarf = {
 
 math.randomseed(os.time() % 60 + os.clock() * 1000000)
 
- function getRandomElement(list)
+ function GetRandomElement(list)
     local randomIndex = math.random(1,  2)
     return list[randomIndex]
 end
 
-local randomElement = getRandomElement(neogarf)
+local randomElement = GetRandomElement(Neogarf)
 
-return { neogarf = randomElement }
+return { Neogarf = randomElement }
