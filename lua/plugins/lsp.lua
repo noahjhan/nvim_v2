@@ -11,6 +11,7 @@ return {
     },
     config = function()
       require("mason").setup()
+
       require("mason-lspconfig").setup({
         ensure_installed = {
           "clangd",
@@ -32,15 +33,60 @@ return {
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
       local servers = {
-        "clangd", "gopls", "pyright", "rust_analyzer",
-        "hls", "ts_ls", "jdtls", "kotlin_language_server",
-        "html", "jsonls", "bashls",
+        "clangd",
+        "gopls",
+        "rust_analyzer",
+        "hls",
+        "ts_ls",
+        "jdtls",
+        "kotlin_language_server",
+        "html",
+        "jsonls",
+        "bashls",
       }
 
       for _, server in ipairs(servers) do
-        vim.lsp.config(server, { capabilities = capabilities })
+        vim.lsp.config(server, {
+          capabilities = capabilities,
+        })
         vim.lsp.enable(server)
       end
+
+      vim.lsp.config("pyright", {
+        capabilities = capabilities,
+
+        root_markers = {
+          "pyproject.toml",
+          "requirements.txt",
+          "setup.py",
+          "setup.cfg",
+          "Pipfile",
+          ".git",
+        },
+
+        before_init = function(_, config)
+          -- Look upward from the current file for a .venv
+          local venv = vim.fn.findfile(".venv/bin/python", ".;")
+
+          if venv ~= "" then
+            config.settings = config.settings or {}
+            config.settings.python = config.settings.python or {}
+            config.settings.python.pythonPath = vim.fn.fnamemodify(venv, ":p")
+          end
+        end,
+
+        settings = {
+          python = {
+            analysis = {
+              autoSearchPaths = true,
+              diagnosticMode = "openFilesOnly",
+              useLibraryCodeForTypes = true,
+            },
+          },
+        },
+      })
+
+      vim.lsp.enable("pyright")
 
       vim.lsp.config("lua_ls", {
         capabilities = capabilities,
@@ -52,6 +98,7 @@ return {
           },
         },
       })
+
       vim.lsp.enable("lua_ls")
 
       vim.diagnostic.config({
@@ -63,8 +110,12 @@ return {
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
           local map = function(lhs, rhs)
-            vim.keymap.set("n", lhs, rhs, { buffer = args.buf, silent = true })
+            vim.keymap.set("n", lhs, rhs, {
+              buffer = args.buf,
+              silent = true,
+            })
           end
+
           map("gd", vim.lsp.buf.definition)
           map("K", vim.lsp.buf.hover)
           map("gr", vim.lsp.buf.references)

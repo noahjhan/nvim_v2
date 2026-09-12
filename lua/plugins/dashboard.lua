@@ -38,6 +38,12 @@ return {
             {
               icon = ' ',
               icon_hl = 'Title',
+              desc = 'Lasagna Rat',
+              action = ':cd ~/github_projects/rat_developer/rat_rs | Ex',
+            },
+            {
+              icon = ' ',
+              icon_hl = 'Title',
               desc = 'Lasagna Config',
               action = ':cd ~/.config/nvim | Ex',
             },
