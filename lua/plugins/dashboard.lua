@@ -1,75 +1,56 @@
-local ascii_art = require('config.ascii')
+local machine = require("config.machine")
+local garfield = require("config.ascii")
 
-math.randomseed(os.time())
+local header = {}
+for _, line in ipairs(garfield.title) do
+  table.insert(header, line)
+end
+for _, line in ipairs(garfield.image) do
+  table.insert(header, line)
+end
 
-local garfield_quotes = {
-  "I'm not overweight. I'm undertall.",
-  "Diet is 'die' with a 't'.",
-  "Love me, feed me, never leave me.",
-  "I'll rise, but I won't shine.",
-  "If you are patient… and wait long enough… Nothing will happen!",
-  "I hate Mondays.",
-  "I love lasagna!",
-  "Show me a good mouser, and I'll show you a cat with bad breath.",
-}
+local center = {}
 
-local random_index = math.random(#garfield_quotes)
-print(garfield_quotes[random_index])
+for _, dir in ipairs(machine.directories) do
+  table.insert(center, {
+    icon = dir.icon,
+    icon_hl = "Title",
+    desc = dir.desc,
+    action = ":cd " .. dir.path .. " | Ex",
+  })
+end
+
+table.insert(center, {
+  icon = " ",
+  icon_hl = "Title",
+  desc = "Lasagna Find",
+  action = ":cd " .. machine.home .. "/github_projects | Telescope find_files | Ex",
+})
+
+table.insert(center, {
+  icon = " ",
+  icon_hl = "Title",
+  desc = "Lasagna Quit",
+  action = ":q",
+})
 
 return {
   {
-    'nvim-tree/nvim-web-devicons'
+    "nvim-tree/nvim-web-devicons",
   },
   {
-    'nvimdev/dashboard-nvim',
-    event = 'VimEnter',
+    "nvimdev/dashboard-nvim",
+    event = "VimEnter",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
     config = function()
-      require('dashboard').setup {
-        theme = 'doom',
+      require("dashboard").setup({
+        theme = "doom",
         config = {
-          header = ascii_art.Neogarf,
-          center = {
-            {
-              icon = ' ',
-              icon_hl = 'Title',
-              desc = 'Lasagna Enter',
-              action = ':cd ~/github_projects | Ex',
-            },
-            {
-              icon = ' ',
-              icon_hl = 'Title',
-              desc = 'Lasagna Rat',
-              action = ':cd ~/github_projects/rat_developer/rat_rs | Ex',
-            },
-            {
-              icon = ' ',
-              icon_hl = 'Title',
-              desc = 'Lasagna Config',
-              action = ':cd ~/.config/nvim | Ex',
-            },
-            {
-              icon = ' ',
-              icon_hl = 'Title',
-              desc = 'Lasagna Wezterm',
-              action = ':cd ~/.config/wezterm | Ex',
-            },
-            {
-              icon = ' ',
-              icon_hl = 'Title',
-              desc = 'Lasagna Find',
-              action = ':cd ~/github_projects | Telescope find_files | Ex'
-            },
-            {
-              icon = ' ',
-              icon_hl = 'Title',
-              desc = 'Lasagna Quit',
-              action = ':q',
-            },
-          },
-          footer = { garfield_quotes[random_index] },
+          header = header,
+          center = center,
+          footer = { garfield.quote },
         },
-      }
+      })
     end,
-    dependencies = { {'nvim-tree/nvim-web-devicons'}}
-  }
+  },
 }

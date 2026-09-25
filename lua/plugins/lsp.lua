@@ -1,3 +1,5 @@
+local machine = require("config.machine")
+
 return {
   {
     "williamboman/mason.nvim",
@@ -12,43 +14,17 @@ return {
     config = function()
       require("mason").setup()
 
+      local servers = machine.lsp_servers()
+
       require("mason-lspconfig").setup({
-        ensure_installed = {
-          "clangd",
-          "lua_ls",
-          "gopls",
-          "pyright",
-          "rust_analyzer",
-          "hls",
-          "ts_ls",
-          "jdtls",
-          "kotlin_language_server",
-          "html",
-          "jsonls",
-          "bashls",
-        },
+        ensure_installed = servers,
         automatic_installation = true,
       })
 
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-      local servers = {
-        "clangd",
-        "gopls",
-        "rust_analyzer",
-        "hls",
-        "ts_ls",
-        "jdtls",
-        "kotlin_language_server",
-        "html",
-        "jsonls",
-        "bashls",
-      }
-
       for _, server in ipairs(servers) do
-        vim.lsp.config(server, {
-          capabilities = capabilities,
-        })
+        vim.lsp.config(server, { capabilities = capabilities })
         vim.lsp.enable(server)
       end
 
@@ -65,13 +41,11 @@ return {
         },
 
         before_init = function(_, config)
-          -- Look upward from the current file for a .venv
           local venv = vim.fn.findfile(".venv/bin/python", ".;")
-
           if venv ~= "" then
-            config.settings = config.settings or {}
-            config.settings.python = config.settings.python or {}
-            config.settings.python.pythonPath = vim.fn.fnamemodify(venv, ":p")
+            config.settings = vim.tbl_deep_extend("force", config.settings or {}, {
+              python = { pythonPath = vim.fn.fnamemodify(venv, ":p") },
+            })
           end
         end,
 
@@ -86,20 +60,14 @@ return {
         },
       })
 
-      vim.lsp.enable("pyright")
-
       vim.lsp.config("lua_ls", {
         capabilities = capabilities,
         settings = {
           Lua = {
-            diagnostics = {
-              globals = { "vim" },
-            },
+            diagnostics = { globals = { "vim" } },
           },
         },
       })
-
-      vim.lsp.enable("lua_ls")
 
       vim.diagnostic.config({
         virtual_text = true,
@@ -110,10 +78,7 @@ return {
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
           local map = function(lhs, rhs)
-            vim.keymap.set("n", lhs, rhs, {
-              buffer = args.buf,
-              silent = true,
-            })
+            vim.keymap.set("n", lhs, rhs, { buffer = args.buf, silent = true })
           end
 
           map("gd", vim.lsp.buf.definition)
