@@ -24,10 +24,10 @@ M.languages = {
 }
 
 M.directories = {
-  { command = "Config",  path = home .. "/.config/nvim",               desc = "Lasagna Config",  icon = " " },
-  { command = "Wezterm", path = home .. "/.config/wezterm",            desc = "Lasagna Wezterm", icon = " " },
   { command = "Tex",     path = home .. "/github_projects",            desc = "Lasagna Enter",   icon = " " },
   { command = "Rat",     path = home .. "/github_projects/rat/rat_rs", desc = "Lasagna Rat",     icon = " " },
+  { command = "Config",  path = home .. "/.config/nvim",               desc = "Lasagna Config",  icon = " " },
+  { command = "Wezterm", path = home .. "/.config/wezterm",            desc = "Lasagna Wezterm", icon = " " },
 }
 
 function M.lsp_servers()

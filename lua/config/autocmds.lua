@@ -21,3 +21,7 @@ vim.api.nvim_create_autocmd("InsertLeave", {
   group = numbering_group,
   callback = function() vim.o.relativenumber = true end,
 })
+
+vim.api.nvim_create_user_command("This", function()
+  vim.cmd("cd %:p:h")
+end, {})

@@ -20,12 +20,12 @@ for _, dir in ipairs(machine.directories) do
   })
 end
 
-table.insert(center, {
-  icon = " ",
-  icon_hl = "Title",
-  desc = "Lasagna Find",
-  action = ":cd " .. machine.home .. "/github_projects | Telescope find_files | Ex",
-})
+-- table.insert(center, {
+--   icon = " ",
+--   icon_hl = "Title",
+--   desc = "Lasagna Find",
+--   action = ":cd " .. machine.home .. "/github_projects | Telescope find_files | Ex",
+-- })
 
 table.insert(center, {
   icon = " ",
