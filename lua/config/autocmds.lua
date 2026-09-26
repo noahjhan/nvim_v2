@@ -25,3 +25,19 @@ vim.api.nvim_create_autocmd("InsertLeave", {
 vim.api.nvim_create_user_command("This", function()
   vim.cmd("cd %:p:h")
 end, {})
+
+vim.api.nvim_create_user_command("Vt", function()
+  vim.cmd("ToggleTerm direction=vertical size=80")
+end, {})
+
+vim.api.nvim_create_user_command("VT", function()
+  vim.cmd("ToggleTerm direction=vertical size=80")
+end, {})
+
+vim.api.nvim_create_user_command("Ht", function()
+  vim.cmd("ToggleTerm direction=horizontal")
+end, {})
+
+vim.api.nvim_create_user_command("HT", function()
+  vim.cmd("ToggleTerm direction=horizontal")
+end, {})
